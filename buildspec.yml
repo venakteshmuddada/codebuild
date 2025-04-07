@@ -1,15 +1,21 @@
+version: 0.2
+
 phases:
   install:
+    runtime-versions:
+      python: 3.8
     commands:
-      - set -x  # This enables debugging
-      - echo "Installing dependencies"
+      - echo Installing Python dependencies...
+      - pip install -r requirements.txt  # Ensure dependencies are installed before building Docker image
+
   build:
     commands:
-      - echo "Building Docker image"
-      - docker build -t $ImageName -f ./Dockerfile .
+      - echo Building the Docker image...
+      - docker build -t $ImageName -f Dockerfile .
+
   post_build:
     commands:
-      - echo "Tagging Docker image"
+      - echo Tagging Docker image...
       - docker tag $ImageName:latest 703671891941.dkr.ecr.us-east-1.amazonaws.com/$ImageName:latest
-      - echo "Pushing Docker image to ECR"
+      - echo Pushing Docker image to ECR...
       - docker push 703671891941.dkr.ecr.us-east-1.amazonaws.com/$ImageName:latest
